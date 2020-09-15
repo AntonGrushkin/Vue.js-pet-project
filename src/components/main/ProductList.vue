@@ -3,15 +3,16 @@
     <ul class="products__product-list">
       <Product v-for="(product, i) in products" :key="i" :product="product"/>
     </ul>
-    <a href="#" class="products__basket" v-if="products.length">
+    <router-link to="/cart" class="products__basket" v-if="products.length">
       <img src="../../assets/basket.svg" alt="Basket">
       <p v-if="cartProductsCount">{{ cartProductsCount }}</p>
-    </a>
+    </router-link>
   </div>
 </template>
 
 <script>
 import Product from '../main/Product';
+import { mapState } from 'vuex';
 export default {
   name: 'ProductList',
   components: {
@@ -20,14 +21,10 @@ export default {
   mounted() {
     this.$store.dispatch('fetchProducts');
   },
-  computed: {
-    products() {
-      return this.$store.state.products.products;
-    },
-    cartProductsCount() {
-      return this.$store.state.cart.products.length;
-    }
-  }
+  computed: mapState({
+    products: state => state.products.products,
+    cartProductsCount: state => state.cart.products.length
+  })
 }
 </script>
 
